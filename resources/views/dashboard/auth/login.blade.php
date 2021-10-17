@@ -51,21 +51,23 @@
                                 <label for="validationCustom08">Ingrese su nombre de usuario</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="validationCustom08"
-                                        placeholder="nombre de usuario" required="" name="username">
+                                        placeholder="nombre de usuario" required name="username" value="{{ old('username') }}">
                                     <div class="invalid-feedback">
                                         Please provide a valid Username.
                                     </div>
                                 </div>
+                                {!! $errors->first('username','<small  class="form-text text-muted">:message</small >')!!}
                             </div>
                             <div class="mb-2">
                                 <label for="validationCustom09">Contraseña</label>
                                 <div class="input-group">
                                     <input type="password" class="form-control" id="validationCustom09"
-                                        placeholder="Contraseña" required="" name="password">
+                                        placeholder="Contraseña" required name="password">
                                     <div class="invalid-feedback">
                                         Please enter a password.
                                     </div>
                                 </div>
+                                {!! $errors->first('password','<small  class="form-text text-muted">:message</small >')!!}
                             </div>
                             <div class="form-group">
                                 <label class="ms-checkbox-wrap">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -29,25 +30,34 @@ class AuthController extends Controller
     *
     * @return void
     */
-    public function login()
+    public function login(Request $request)
     {
         $credentials = $this->validate(request(), [
             'username' => 'required|string',
             'password' => 'required|string'
             ]);
+        $messages=[
+                'username.required'=>"reqerido",
+                'password.required'=>"password requerido",
+            ];
+        $error = Validator::make($request->all(), $credentials, $messages);
+
         $user = User::where('username', request()->input('username'))
         ->where('password', request()->input('password'))
         ->first();
         $remember_me = request()->has('remember') ? true : false;
         if (empty($user)) {
-            dd("error");
-            return redirect(route('login'))->with('flash', 'This data is incorrect');
+            return redirect(route('showlogin'))
+            ->with('flash', 'This data is incorrect')
+            ->withInput($request->username)
+            //->withError(['username'=>trans('auth.failed')]);
+            ->withError($error->errors());
         } elseif (Auth::loginUsingId($user->userId, $remember_me)) {
             // Authentication passed...
             return redirect(route('show.venta'));
         } else {
-            dd("error 2");
-            return redirect(route('login'))->with('flash', 'This data is incorrect');
+            //dd("error 2");
+            return redirect(route('showlogin'))->with('flash', 'This data is incorrect');
         }
     }
     public function logout()
